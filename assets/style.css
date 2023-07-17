@@ -6,6 +6,7 @@ h1 {
     background-color: black;
     color: white;
     padding: 20px 0;
+    text-align: center;
 }
 
 #content {
@@ -15,6 +16,10 @@ h1 {
 
 #recentSearches, #weatherData {
     width: 45%;
+}
+
+#recentSearches {
+    max-width: 200px;
 }
 
 #recentSearches li {
