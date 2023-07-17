@@ -1,19 +1,20 @@
+/* General writing style */
 body {
     font-family: Arial, sans-serif;
 }
-
+/*page header design */
 h1 {
     background-color: black;
     color: white;
     padding: 20px 0;
     text-align: center;
 }
-
+/* general page layout */
 #content {
     display: flex;
     justify-content: space-around;
 }
-
+/* recent searches customisation */
 #recentSearches, #weatherData {
     width: 45%;
 }
@@ -35,9 +36,11 @@ h1 {
 #recentSearches li:hover {
     background-color: #bbb;
 }
+/* recent searches customisation END */
 
+/* Search results layout and colour style */
 #weatherData div {
-    background-color: #98FB98;
+    background-color: #7aee7a;
     border: 1px solid black;
     color: white;
     margin: 10px;
