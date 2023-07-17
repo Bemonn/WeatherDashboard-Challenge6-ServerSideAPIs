@@ -1,5 +1,22 @@
-document.getElementById("getWeatherButton").addEventListener("click", function() {
+document.getElementById("getWeatherButton").addEventListener("click", getWeatherData);
+
+function getWeatherData() {
     var cityName = document.getElementById("cityInput").value;
+    var recentSearches = JSON.parse(localStorage.getItem("recentSearches")) || [];
+    if (!recentSearches.includes(cityName)) {
+        recentSearches.push(cityName);
+        localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
+    }
+
+    var searchList = document.getElementById("searchList");
+    searchList.innerHTML = recentSearches.map(city => `<li>${city}</li>`).join("");
+    
+    Array.from(searchList.getElementsByTagName("li")).forEach(li => {
+        li.addEventListener("click", function(event) {
+            document.getElementById("cityInput").value = event.target.innerText;
+            getWeatherData();
+        });
+    });
 
     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=d26820fd5faa8e979085f14ccd41f788`)
         .then(response => {
@@ -25,11 +42,11 @@ document.getElementById("getWeatherButton").addEventListener("click", function()
 
             for(let i = 0; i < 40; i+=8) {
                 let weather = data.list[i];
-                let dayIndex = i/8 + 1;
+                let date = new Date(weather.dt_txt);
 
                 weatherHTML += `
                     <div>
-                        <h2>Day ${dayIndex}:</h2>
+                        <h2>${cityName} - ${date.toDateString()}</h2>
                         <p>Temperature: ${weather.main.temp} K</p>
                         <p>Weather: ${weather.weather[0].main}</p>
                         <p>Description: ${weather.weather[0].description}</p>
@@ -43,4 +60,16 @@ document.getElementById("getWeatherButton").addEventListener("click", function()
             console.error('Error:', error);
             alert(error);
         });
+}
+
+var recentSearches = JSON.parse(localStorage.getItem("recentSearches")) || [];
+var searchList = document.getElementById("searchList");
+
+searchList.innerHTML = recentSearches.map(city => `<li>${city}</li>`).join("");
+
+Array.from(searchList.getElementsByTagName("li")).forEach(li => {
+    li.addEventListener("click", function(event) {
+        document.getElementById("cityInput").value = event.target.innerText;
+        getWeatherData();
+    });
 });
