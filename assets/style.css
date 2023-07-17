@@ -2,6 +2,39 @@ body {
     font-family: Arial, sans-serif;
 }
 
-#weatherData {
-    margin-top: 20px;
+h1 {
+    background-color: black;
+    color: white;
+    padding: 20px 0;
+}
+
+#content {
+    display: flex;
+    justify-content: space-around;
+}
+
+#recentSearches, #weatherData {
+    width: 45%;
+}
+
+#recentSearches li {
+    background-color: #ddd;
+    border: 1px solid black;
+    cursor: pointer;
+    list-style-type: none;
+    margin: 10px 0;
+    padding: 10px;
+    text-align: center;
+}
+
+#recentSearches li:hover {
+    background-color: #bbb;
+}
+
+#weatherData div {
+    background-color: #98FB98;
+    border: 1px solid black;
+    color: white;
+    margin: 10px;
+    padding: 10px;
 }
