@@ -2,21 +2,10 @@ document.getElementById("getWeatherButton").addEventListener("click", getWeather
 
 function getWeatherData() {
     var cityName = document.getElementById("cityInput").value;
-    var recentSearches = JSON.parse(localStorage.getItem("recentSearches")) || [];
-    if (!recentSearches.includes(cityName)) {
-        recentSearches.push(cityName);
-        localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
+    if(!cityName) {
+        alert("Please enter a city name.");
+        return;
     }
-
-    var searchList = document.getElementById("searchList");
-    searchList.innerHTML = recentSearches.map(city => `<li>${city}</li>`).join("");
-    
-    Array.from(searchList.getElementsByTagName("li")).forEach(li => {
-        li.addEventListener("click", function(event) {
-            document.getElementById("cityInput").value = event.target.innerText;
-            getWeatherData();
-        });
-    });
 
     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=d26820fd5faa8e979085f14ccd41f788`)
         .then(response => {
@@ -26,6 +15,14 @@ function getWeatherData() {
             return response.json();
         })
         .then(data => {
+            var recentSearches = JSON.parse(localStorage.getItem("recentSearches")) || [];
+            if (!recentSearches.includes(cityName)) {
+                recentSearches.push(cityName);
+                localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
+            }
+
+            updateRecentSearches();
+
             var lat = data.coord.lat;
             var lon = data.coord.lon;
 
@@ -62,14 +59,18 @@ function getWeatherData() {
         });
 }
 
-var recentSearches = JSON.parse(localStorage.getItem("recentSearches")) || [];
-var searchList = document.getElementById("searchList");
+function updateRecentSearches() {
+    var recentSearches = JSON.parse(localStorage.getItem("recentSearches")) || [];
+    var searchList = document.getElementById("searchList");
+    searchList.innerHTML = recentSearches.map(city => `<li>${city}</li>`).join("");
 
-searchList.innerHTML = recentSearches.map(city => `<li>${city}</li>`).join("");
-
-Array.from(searchList.getElementsByTagName("li")).forEach(li => {
-    li.addEventListener("click", function(event) {
-        document.getElementById("cityInput").value = event.target.innerText;
-        getWeatherData();
+    Array.from(searchList.getElementsByTagName("li")).forEach(li => {
+        li.addEventListener("click", function(event) {
+            document.getElementById("cityInput").value = event.target.innerText;
+            getWeatherData();
+        });
     });
-});
+}
+
+// Load recent searches from localStorage on page load
+updateRecentSearches();
